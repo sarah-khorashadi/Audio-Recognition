@@ -2,6 +2,8 @@ import argparse
 import tensorflow as tf
 from IPython import display
 import numpy as np
+from pydub import AudioSegment
+import os
 
 def get_spectrogram(waveform):
     spectrogram = tf.signal.stft(
@@ -22,7 +24,7 @@ class Recognizer:
     def predict(self, audio_file):
         if self.model is None:
             raise ValueError("Model has not been loaded. Call model_load() first.")
-
+        
         audio_file, sample_rate = tf.audio.decode_wav(audio_file, desired_channels=1, desired_samples=4*16000,)
         audio_file = tf.squeeze(audio_file, axis=-1)
 
@@ -64,10 +66,15 @@ if __name__ == "__main__":
 
 
     # Predict the labels for each audio file
-    for audio_file in audio_files:
-        audio_file = tf.io.read_file(str(audio_file))
+    for af in audio_files:
+        sound = AudioSegment.from_file(af)
+        sound.set_frame_rate(16000).export(af+'.new', format="wav")
+
+        audio_file = tf.io.read_file(str(af+'.new'))
 
         predicted_label = recognizer.predict(audio_file)
         predicted_labels.append(predicted_label)
+        os.remove(str(af+'.new'))
+
     
     print(predicted_labels)
