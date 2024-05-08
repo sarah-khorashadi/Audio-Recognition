@@ -17,5 +17,5 @@ Assuming that our input only includes one of these 12 items, we will design a cl
 
 Finally, the output of this project will be a Recognizer class that will have two methods:
 
-model_load method: This method should load the desired model into RAM memory upon invocation and be ready for use.
-predict method: The input to this method will be the address of an audio file, and this method will be used to classify files.
+**model_load** method: This method should load the desired model into RAM memory upon invocation and be ready for use.
+**predict** method: The input to this method will be the address of an audio file, and this method will be used to classify files.
